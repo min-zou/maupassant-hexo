@@ -8,6 +8,16 @@ block title
   if page.archive
      title= __('archive') + ' | ' + config.title
 block content
+  include _widget/post.pug
+  .archive
+        h2(class='archive-year tagcloud')= 'Tags Cloud'
+        - var tagcloudRoot = config.root + "js/tagcloud.js"; var tagcanvasRoot = config.root + "js/tagcanvas.js";
+        script(type='text/javascript', charset='utf-8', src=tagcloudRoot)
+        script(type='text/javascript', charset='utf-8', src=tagcanvasRoot)
+        #myCanvasContainer.widget.tagcloud(align='center')
+            canvas#resCanvas(width='600', height='500', align=center)
+                !=tagcloud()
+
   if page.category || page.tag
       h1.label-title=  __('reading_label', page.category || page.tag)
   .post
@@ -18,7 +28,7 @@ block content
           ul.listing
             for post in posts
               li
-                span.date= post.date.format(config.date_format)
+                span.date= post.date.format('YYYY/MM/DD')
                 a(href=url_for(post.path), title=post.title)
                   +title(post)
   include _partial/paginator.pug
